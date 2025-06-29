@@ -1,30 +1,19 @@
-"use client"
-
 import type React from "react"
+import ClientLayout from "./client-layout"
 
-import { WagmiProvider } from "wagmi"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { config } from "./config/wagmi"
-import "./globals.css"
-
-const queryClient = new QueryClient()
+export const metadata = {
+  title: "AbrahamNAVIG - ERC20 Token DApp",
+  description: "Connect to MetaMask and interact with your ERC20 token on Base Sepolia",
+  generator: "v0.dev",
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body>
-        <WagmiProvider config={config}>
-          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-        </WagmiProvider>
-      </body>
-    </html>
-  )
+  return <ClientLayout>{children}</ClientLayout>
 }
 
-export const metadata = {
-      generator: 'v0.dev'
-    };
+
+import './globals.css'

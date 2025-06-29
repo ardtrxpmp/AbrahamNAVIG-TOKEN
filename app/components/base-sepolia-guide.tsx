@@ -2,22 +2,23 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ExternalLink, ChevronDown, ChevronUp } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
+import { ChevronDown, ExternalLink, Plus } from "lucide-react"
 
 export default function BaseSepoliaGuide() {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
 
-  const addBaseSepoliaToWallet = async () => {
+  const addBaseSepoliaToMetaMask = async () => {
     try {
       await window.ethereum?.request({
         method: "wallet_addEthereumChain",
         params: [
           {
-            chainId: "0x14a34", // 84532 in hex
+            chainId: "0x14A34", // 84532 in hex
             chainName: "Base Sepolia",
             nativeCurrency: {
-              name: "Ethereum",
+              name: "ETH",
               symbol: "ETH",
               decimals: 18,
             },
@@ -32,93 +33,86 @@ export default function BaseSepoliaGuide() {
   }
 
   return (
-    <div className="backdrop-blur-md bg-white/10 rounded-2xl p-6 border border-white/20 shadow-xl">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="text-xl font-semibold text-white">Base Sepolia Setup</h3>
-            <p className="text-blue-200">Need help connecting to Base Sepolia?</p>
-          </div>
-        </div>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <CollapsibleTrigger asChild>
         <Button
           variant="outline"
-          size="sm"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-300"
+          className="w-full backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-300"
         >
-          {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          <span className="mr-2">🛠️</span>
+          Base Sepolia Setup Guide
+          <ChevronDown className={`ml-2 h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
         </Button>
-      </div>
+      </CollapsibleTrigger>
 
-      {isExpanded && (
-        <div className="space-y-4">
-          <Alert className="backdrop-blur-sm bg-blue-500/20 border-blue-400/30">
-            <AlertDescription className="text-blue-200 space-y-3">
-              <div>
-                <strong>Step 1:</strong> Add Base Sepolia to your MetaMask
-              </div>
-              <Button
-                onClick={addBaseSepoliaToWallet}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300"
-              >
-                <span className="mr-2">➕</span>
-                Add Base Sepolia Network
-              </Button>
-            </AlertDescription>
-          </Alert>
-
-          <Alert className="backdrop-blur-sm bg-green-500/20 border-green-400/30">
-            <AlertDescription className="text-green-200 space-y-3">
-              <div>
-                <strong>Step 2:</strong> Get Base Sepolia ETH for gas fees
-              </div>
-              <div className="flex gap-2">
+      <CollapsibleContent className="mt-4">
+        <Card className="backdrop-blur-md bg-white/10 border-white/20">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <span>⚡</span> Base Sepolia Network Setup
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-white">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 backdrop-blur-sm bg-white/5 rounded-lg border border-white/10">
+                <div>
+                  <p className="font-medium">1. Add Base Sepolia Network</p>
+                  <p className="text-sm text-blue-200">Add the network to your MetaMask</p>
+                </div>
                 <Button
-                  variant="outline"
+                  onClick={addBaseSepoliaToMetaMask}
                   size="sm"
-                  onClick={() => window.open("https://www.coinbase.com/faucets/base-ethereum-sepolia-faucet", "_blank")}
-                  className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Coinbase Faucet
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Network
                 </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-3 backdrop-blur-sm bg-white/5 rounded-lg border border-white/10">
+                <div>
+                  <p className="font-medium">2. Get Test ETH</p>
+                  <p className="text-sm text-blue-200">Get free testnet ETH for gas fees</p>
+                </div>
                 <Button
-                  variant="outline"
+                  onClick={() => window.open("https://www.alchemy.com/faucets/base-sepolia", "_blank")}
                   size="sm"
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+                  <ExternalLink className="h-4 w-4 mr-1" />
+                  Faucet
+                </Button>
+              </div>
+
+              <div className="flex items-center justify-between p-3 backdrop-blur-sm bg-white/5 rounded-lg border border-white/10">
+                <div>
+                  <p className="font-medium">3. Alternative Faucet</p>
+                  <p className="text-sm text-blue-200">Backup faucet option</p>
+                </div>
+                <Button
                   onClick={() => window.open("https://faucet.quicknode.com/base/sepolia", "_blank")}
-                  className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-300"
+                  size="sm"
+                  variant="outline"
+                  className="border-white/20 text-white hover:bg-white/10"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  QuickNode Faucet
+                  <ExternalLink className="h-4 w-4 mr-1" />
+                  QuickNode
                 </Button>
               </div>
-            </AlertDescription>
-          </Alert>
+            </div>
 
-          <Alert className="backdrop-blur-sm bg-purple-500/20 border-purple-400/30">
-            <AlertDescription className="text-purple-200 space-y-3">
-              <div>
-                <strong>Step 3:</strong> View your contract on Base Sepolia explorer
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  window.open(
-                    "https://sepolia.basescan.org/address/0x3B1af0A5922e1228e57Ec2325f3e2D3E3C2935e9",
-                    "_blank",
-                  )
-                }
-                className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 transition-all duration-300"
-              >
-                <ExternalLink className="w-4 h-4 mr-2" />
-                View Contract on BaseScan
-              </Button>
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-    </div>
+            <div className="mt-4 p-3 backdrop-blur-sm bg-blue-500/20 rounded-lg border border-blue-400/30">
+              <p className="text-sm text-blue-200">
+                <strong>Network Details:</strong>
+                <br />• Chain ID: 84532
+                <br />• RPC URL: https://sepolia.base.org
+                <br />• Explorer: https://sepolia.basescan.org
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
