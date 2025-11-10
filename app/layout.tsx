@@ -1,5 +1,7 @@
-import type React from "react"
-import ClientLayout from "./client-layout"
+import type React from 'react'
+import { headers } from 'next/headers'
+import ContextProvider from '@/context'
+import './globals.css'
 
 export const metadata = {
   title: "AbrahamNAVIG - ERC20 Token DApp",
@@ -7,13 +9,21 @@ export const metadata = {
   generator: "v0.dev",
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <ClientLayout>{children}</ClientLayout>
+  const headersObj = headers()
+  const cookies = headersObj.get('cookie')
+
+  return (
+    <html lang="en">
+      <body>
+        <ContextProvider cookies={cookies}>
+          {children}
+        </ContextProvider>
+      </body>
+    </html>
+  )
 }
-
-
-import './globals.css'
